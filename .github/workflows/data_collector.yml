@@ -25,6 +25,7 @@ jobs:
         pip install httpx requests bs4 html2text emoji sqlalchemy dotenv oracledb borneo oci
 
     - name: Data Collector
+      working-directory: ./main
       env:
         ORACLE_USER: ${{ secrets.ORACLE_USER }}
         ORACLE_PASSWORD: ${{ secrets.ORACLE_PASSWORD }}
