@@ -1,0 +1,1638 @@
+[2025-12-02 09:59:30] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 09:59:51] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 09:59:52] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 09:59:52] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 09:59:52] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 09:59:52] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 09:59:52] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 09:59:52] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 09:59:53] ERROR | [WANTED] 🔥 에러 발생: Mapper 'Mapper[RawWantedJob(RAW_WANTED_JOBS)]' has no property 'detail_tags'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+Traceback (most recent call last):
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2522, in get_property
+    return self._props[key]
+           ~~~~~~~~~~~^^^^^
+KeyError: 'detail_tags'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/job_helper/main/data_collector.py", line 70, in run_crawler_task
+    existing_ids = repository.get_existing_ids(job_ids)
+  File "/home/ubuntu/job_helper/main/repository/base.py", line 22, in get_existing_ids
+    result = self.session.execute(stmt).scalars().all()
+             ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1633, in _execute_clauseelement
+    compiled_sql, extracted_params, cache_hit = elem._compile_w_cache(
+                                                ~~~~~~~~~~~~~~~~~~~~~^
+        dialect=dialect,
+        ^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        linting=self.dialect.compiler_linting | compiler.WARN_LINTING,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 715, in _compile_w_cache
+    compiled_sql = self._compiler(
+        dialect,
+    ...<4 lines>...
+        **kw,
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 323, in _compiler
+    return dialect.statement_compiler(dialect, self, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/dialects/oracle/base.py", line 1238, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 1446, in __init__
+    Compiled.__init__(self, dialect, statement, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 886, in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 932, in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/visitors.py", line 138, in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 4781, in visit_select
+    compile_state = select_stmt._compile_state_factory(
+        select_stmt, self, **kwargs
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/base.py", line 701, in create_for_statement
+    return klass.create_for_statement(statement, compiler, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 447, in create_for_statement
+    return cls._create_orm_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        cast("Union[Select, FromStatement]", statement),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **kw,
+        ^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 1175, in _create_orm_context
+    _QueryEntity.to_compile_state(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<2 lines>...
+        is_current_entities=True,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 2661, in to_compile_state
+    _ColumnEntity._for_columns(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        compile_state,
+        ^^^^^^^^^^^^^^
+    ...<3 lines>...
+        is_current_entities,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 3015, in _for_columns
+    _ORMColumnEntity(
+    ~~~~~~~~~~~~~~~~^
+        compile_state,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        parent_bundle=parent_bundle,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 3235, in __init__
+    _entity._post_inspect
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 1338, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 4218, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 4259, in _do_configure_registries
+    mapper._post_configure_properties()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2418, in _post_configure_properties
+    prop.init()
+    ~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/interfaces.py", line 595, in init
+    self.do_init()
+    ~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/relationships.py", line 1660, in do_init
+    self._generate_backref()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/relationships.py", line 2144, in _generate_backref
+    self._add_reverse_property(self.back_populates)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/relationships.py", line 1591, in _add_reverse_property
+    other = self.mapper.get_property(key, _configure_mappers=False)
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2524, in get_property
+    raise sa_exc.InvalidRequestError(
+    ...<3 lines>...
+    ) from err
+sqlalchemy.exc.InvalidRequestError: Mapper 'Mapper[RawWantedJob(RAW_WANTED_JOBS)]' has no property 'detail_tags'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+[2025-12-02 09:59:53] INFO | [WANTED] 🏁 종료 (총 0건 저장)
+[2025-12-02 10:00:10] INFO | [SARAMIN] 🏁 종료 (총 0건 저장)
+[2025-12-02 10:00:10] INFO | [JOBKOREA] 🏁 종료 (총 0건 저장)
+[2025-12-02 10:00:15] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 10:00:15] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 10:00:15] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 10:00:15] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 10:00:15] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 10:00:15] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 10:00:15] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 10:00:16] ERROR | [WANTED] 🔥 에러 발생: Mapper 'Mapper[RawWantedJob(RAW_WANTED_JOBS)]' has no property 'detail_tags'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+Traceback (most recent call last):
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2522, in get_property
+    return self._props[key]
+           ~~~~~~~~~~~^^^^^
+KeyError: 'detail_tags'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/job_helper/main/data_collector.py", line 70, in run_crawler_task
+    existing_ids = repository.get_existing_ids(job_ids)
+  File "/home/ubuntu/job_helper/main/repository/base.py", line 22, in get_existing_ids
+    result = self.session.execute(stmt).scalars().all()
+             ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1633, in _execute_clauseelement
+    compiled_sql, extracted_params, cache_hit = elem._compile_w_cache(
+                                                ~~~~~~~~~~~~~~~~~~~~~^
+        dialect=dialect,
+        ^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        linting=self.dialect.compiler_linting | compiler.WARN_LINTING,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 715, in _compile_w_cache
+    compiled_sql = self._compiler(
+        dialect,
+    ...<4 lines>...
+        **kw,
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 323, in _compiler
+    return dialect.statement_compiler(dialect, self, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/dialects/oracle/base.py", line 1238, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 1446, in __init__
+    Compiled.__init__(self, dialect, statement, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 886, in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 932, in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/visitors.py", line 138, in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 4781, in visit_select
+    compile_state = select_stmt._compile_state_factory(
+        select_stmt, self, **kwargs
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/base.py", line 701, in create_for_statement
+    return klass.create_for_statement(statement, compiler, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 447, in create_for_statement
+    return cls._create_orm_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        cast("Union[Select, FromStatement]", statement),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **kw,
+        ^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 1175, in _create_orm_context
+    _QueryEntity.to_compile_state(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<2 lines>...
+        is_current_entities=True,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 2661, in to_compile_state
+    _ColumnEntity._for_columns(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        compile_state,
+        ^^^^^^^^^^^^^^
+    ...<3 lines>...
+        is_current_entities,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 3015, in _for_columns
+    _ORMColumnEntity(
+    ~~~~~~~~~~~~~~~~^
+        compile_state,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        parent_bundle=parent_bundle,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 3235, in __init__
+    _entity._post_inspect
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 1338, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 4218, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 4259, in _do_configure_registries
+    mapper._post_configure_properties()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2418, in _post_configure_properties
+    prop.init()
+    ~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/interfaces.py", line 595, in init
+    self.do_init()
+    ~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/relationships.py", line 1660, in do_init
+    self._generate_backref()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/relationships.py", line 2144, in _generate_backref
+    self._add_reverse_property(self.back_populates)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/relationships.py", line 1591, in _add_reverse_property
+    other = self.mapper.get_property(key, _configure_mappers=False)
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2524, in get_property
+    raise sa_exc.InvalidRequestError(
+    ...<3 lines>...
+    ) from err
+sqlalchemy.exc.InvalidRequestError: Mapper 'Mapper[RawWantedJob(RAW_WANTED_JOBS)]' has no property 'detail_tags'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+[2025-12-02 10:00:16] INFO | [WANTED] 🏁 종료 (총 0건 저장)
+[2025-12-02 10:00:16] ERROR | [JOBKOREA] 🔥 에러 발생: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[RawWantedJobDetailTag(RAW_WANTED_JOB_DETAIL_TAGS)]'. Original exception was: Mapper 'Mapper[RawWantedJob(RAW_WANTED_JOBS)]' has no property 'detail_tags'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+Traceback (most recent call last):
+  File "/home/ubuntu/job_helper/main/data_collector.py", line 70, in run_crawler_task
+    existing_ids = repository.get_existing_ids(job_ids)
+  File "/home/ubuntu/job_helper/main/repository/base.py", line 22, in get_existing_ids
+    result = self.session.execute(stmt).scalars().all()
+             ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1633, in _execute_clauseelement
+    compiled_sql, extracted_params, cache_hit = elem._compile_w_cache(
+                                                ~~~~~~~~~~~~~~~~~~~~~^
+        dialect=dialect,
+        ^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        linting=self.dialect.compiler_linting | compiler.WARN_LINTING,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 715, in _compile_w_cache
+    compiled_sql = self._compiler(
+        dialect,
+    ...<4 lines>...
+        **kw,
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 323, in _compiler
+    return dialect.statement_compiler(dialect, self, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/dialects/oracle/base.py", line 1238, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 1446, in __init__
+    Compiled.__init__(self, dialect, statement, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 886, in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 932, in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/visitors.py", line 138, in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 4781, in visit_select
+    compile_state = select_stmt._compile_state_factory(
+        select_stmt, self, **kwargs
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/base.py", line 701, in create_for_statement
+    return klass.create_for_statement(statement, compiler, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 447, in create_for_statement
+    return cls._create_orm_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        cast("Union[Select, FromStatement]", statement),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **kw,
+        ^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 1175, in _create_orm_context
+    _QueryEntity.to_compile_state(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<2 lines>...
+        is_current_entities=True,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 2661, in to_compile_state
+    _ColumnEntity._for_columns(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        compile_state,
+        ^^^^^^^^^^^^^^
+    ...<3 lines>...
+        is_current_entities,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 3015, in _for_columns
+    _ORMColumnEntity(
+    ~~~~~~~~~~~~~~~~^
+        compile_state,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        parent_bundle=parent_bundle,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 3235, in __init__
+    _entity._post_inspect
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 1338, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 4218, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 4255, in _do_configure_registries
+    raise e
+sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[RawWantedJobDetailTag(RAW_WANTED_JOB_DETAIL_TAGS)]'. Original exception was: Mapper 'Mapper[RawWantedJob(RAW_WANTED_JOBS)]' has no property 'detail_tags'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+[2025-12-02 10:00:16] INFO | [JOBKOREA] 🏁 종료 (총 0건 저장)
+[2025-12-02 10:00:16] ERROR | [SARAMIN] 🔥 에러 발생: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[RawWantedJobDetailTag(RAW_WANTED_JOB_DETAIL_TAGS)]'. Original exception was: Mapper 'Mapper[RawWantedJob(RAW_WANTED_JOBS)]' has no property 'detail_tags'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+Traceback (most recent call last):
+  File "/home/ubuntu/job_helper/main/data_collector.py", line 70, in run_crawler_task
+    existing_ids = repository.get_existing_ids(job_ids)
+  File "/home/ubuntu/job_helper/main/repository/base.py", line 22, in get_existing_ids
+    result = self.session.execute(stmt).scalars().all()
+             ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1633, in _execute_clauseelement
+    compiled_sql, extracted_params, cache_hit = elem._compile_w_cache(
+                                                ~~~~~~~~~~~~~~~~~~~~~^
+        dialect=dialect,
+        ^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        linting=self.dialect.compiler_linting | compiler.WARN_LINTING,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 715, in _compile_w_cache
+    compiled_sql = self._compiler(
+        dialect,
+    ...<4 lines>...
+        **kw,
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 323, in _compiler
+    return dialect.statement_compiler(dialect, self, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/dialects/oracle/base.py", line 1238, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 1446, in __init__
+    Compiled.__init__(self, dialect, statement, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 886, in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 932, in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/visitors.py", line 138, in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 4781, in visit_select
+    compile_state = select_stmt._compile_state_factory(
+        select_stmt, self, **kwargs
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/base.py", line 701, in create_for_statement
+    return klass.create_for_statement(statement, compiler, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 447, in create_for_statement
+    return cls._create_orm_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        cast("Union[Select, FromStatement]", statement),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **kw,
+        ^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 1175, in _create_orm_context
+    _QueryEntity.to_compile_state(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<2 lines>...
+        is_current_entities=True,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 2661, in to_compile_state
+    _ColumnEntity._for_columns(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        compile_state,
+        ^^^^^^^^^^^^^^
+    ...<3 lines>...
+        is_current_entities,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 3015, in _for_columns
+    _ORMColumnEntity(
+    ~~~~~~~~~~~~~~~~^
+        compile_state,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        parent_bundle=parent_bundle,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 3235, in __init__
+    _entity._post_inspect
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 1338, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 4218, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 4255, in _do_configure_registries
+    raise e
+sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[RawWantedJobDetailTag(RAW_WANTED_JOB_DETAIL_TAGS)]'. Original exception was: Mapper 'Mapper[RawWantedJob(RAW_WANTED_JOBS)]' has no property 'detail_tags'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+[2025-12-02 10:00:16] INFO | [SARAMIN] 🏁 종료 (총 0건 저장)
+[2025-12-02 10:00:16] INFO | ============== [모든 크롤러 종료] ==============
+[2025-12-02 10:01:25] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 10:01:25] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 10:01:26] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 10:01:26] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 10:01:26] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 10:01:26] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 10:01:26] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 10:01:26] ERROR | [WANTED] 🔥 에러 발생: Mapper 'Mapper[RawWantedJob(RAW_WANTED_JOBS)]' has no property 'detail_tags'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+Traceback (most recent call last):
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2522, in get_property
+    return self._props[key]
+           ~~~~~~~~~~~^^^^^
+KeyError: 'detail_tags'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/job_helper/main/data_collector.py", line 70, in run_crawler_task
+    existing_ids = repository.get_existing_ids(job_ids)
+  File "/home/ubuntu/job_helper/main/repository/base.py", line 22, in get_existing_ids
+    result = self.session.execute(stmt).scalars().all()
+             ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1633, in _execute_clauseelement
+    compiled_sql, extracted_params, cache_hit = elem._compile_w_cache(
+                                                ~~~~~~~~~~~~~~~~~~~~~^
+        dialect=dialect,
+        ^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        linting=self.dialect.compiler_linting | compiler.WARN_LINTING,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 715, in _compile_w_cache
+    compiled_sql = self._compiler(
+        dialect,
+    ...<4 lines>...
+        **kw,
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 323, in _compiler
+    return dialect.statement_compiler(dialect, self, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/dialects/oracle/base.py", line 1238, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 1446, in __init__
+    Compiled.__init__(self, dialect, statement, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 886, in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 932, in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/visitors.py", line 138, in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 4781, in visit_select
+    compile_state = select_stmt._compile_state_factory(
+        select_stmt, self, **kwargs
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/base.py", line 701, in create_for_statement
+    return klass.create_for_statement(statement, compiler, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 447, in create_for_statement
+    return cls._create_orm_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        cast("Union[Select, FromStatement]", statement),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **kw,
+        ^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 1175, in _create_orm_context
+    _QueryEntity.to_compile_state(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<2 lines>...
+        is_current_entities=True,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 2661, in to_compile_state
+    _ColumnEntity._for_columns(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        compile_state,
+        ^^^^^^^^^^^^^^
+    ...<3 lines>...
+        is_current_entities,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 3015, in _for_columns
+    _ORMColumnEntity(
+    ~~~~~~~~~~~~~~~~^
+        compile_state,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        parent_bundle=parent_bundle,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 3235, in __init__
+    _entity._post_inspect
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 1338, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 4218, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 4259, in _do_configure_registries
+    mapper._post_configure_properties()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2418, in _post_configure_properties
+    prop.init()
+    ~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/interfaces.py", line 595, in init
+    self.do_init()
+    ~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/relationships.py", line 1660, in do_init
+    self._generate_backref()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/relationships.py", line 2144, in _generate_backref
+    self._add_reverse_property(self.back_populates)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/relationships.py", line 1591, in _add_reverse_property
+    other = self.mapper.get_property(key, _configure_mappers=False)
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2524, in get_property
+    raise sa_exc.InvalidRequestError(
+    ...<3 lines>...
+    ) from err
+sqlalchemy.exc.InvalidRequestError: Mapper 'Mapper[RawWantedJob(RAW_WANTED_JOBS)]' has no property 'detail_tags'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+[2025-12-02 10:01:26] INFO | [WANTED] 🏁 종료 (총 0건 저장)
+[2025-12-02 10:01:26] ERROR | [JOBKOREA] 🔥 에러 발생: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[RawWantedJobDetailTag(RAW_WANTED_JOB_DETAIL_TAGS)]'. Original exception was: Mapper 'Mapper[RawWantedJob(RAW_WANTED_JOBS)]' has no property 'detail_tags'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+Traceback (most recent call last):
+  File "/home/ubuntu/job_helper/main/data_collector.py", line 70, in run_crawler_task
+    existing_ids = repository.get_existing_ids(job_ids)
+  File "/home/ubuntu/job_helper/main/repository/base.py", line 22, in get_existing_ids
+    result = self.session.execute(stmt).scalars().all()
+             ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1633, in _execute_clauseelement
+    compiled_sql, extracted_params, cache_hit = elem._compile_w_cache(
+                                                ~~~~~~~~~~~~~~~~~~~~~^
+        dialect=dialect,
+        ^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        linting=self.dialect.compiler_linting | compiler.WARN_LINTING,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 715, in _compile_w_cache
+    compiled_sql = self._compiler(
+        dialect,
+    ...<4 lines>...
+        **kw,
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 323, in _compiler
+    return dialect.statement_compiler(dialect, self, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/dialects/oracle/base.py", line 1238, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 1446, in __init__
+    Compiled.__init__(self, dialect, statement, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 886, in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 932, in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/visitors.py", line 138, in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 4781, in visit_select
+    compile_state = select_stmt._compile_state_factory(
+        select_stmt, self, **kwargs
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/base.py", line 701, in create_for_statement
+    return klass.create_for_statement(statement, compiler, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 447, in create_for_statement
+    return cls._create_orm_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        cast("Union[Select, FromStatement]", statement),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **kw,
+        ^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 1175, in _create_orm_context
+    _QueryEntity.to_compile_state(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<2 lines>...
+        is_current_entities=True,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 2661, in to_compile_state
+    _ColumnEntity._for_columns(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        compile_state,
+        ^^^^^^^^^^^^^^
+    ...<3 lines>...
+        is_current_entities,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 3015, in _for_columns
+    _ORMColumnEntity(
+    ~~~~~~~~~~~~~~~~^
+        compile_state,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        parent_bundle=parent_bundle,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 3235, in __init__
+    _entity._post_inspect
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 1338, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 4218, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 4255, in _do_configure_registries
+    raise e
+sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[RawWantedJobDetailTag(RAW_WANTED_JOB_DETAIL_TAGS)]'. Original exception was: Mapper 'Mapper[RawWantedJob(RAW_WANTED_JOBS)]' has no property 'detail_tags'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+[2025-12-02 10:01:26] INFO | [JOBKOREA] 🏁 종료 (총 0건 저장)
+[2025-12-02 10:01:27] ERROR | [SARAMIN] 🔥 에러 발생: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[RawWantedJobDetailTag(RAW_WANTED_JOB_DETAIL_TAGS)]'. Original exception was: Mapper 'Mapper[RawWantedJob(RAW_WANTED_JOBS)]' has no property 'detail_tags'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+Traceback (most recent call last):
+  File "/home/ubuntu/job_helper/main/data_collector.py", line 70, in run_crawler_task
+    existing_ids = repository.get_existing_ids(job_ids)
+  File "/home/ubuntu/job_helper/main/repository/base.py", line 22, in get_existing_ids
+    result = self.session.execute(stmt).scalars().all()
+             ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1633, in _execute_clauseelement
+    compiled_sql, extracted_params, cache_hit = elem._compile_w_cache(
+                                                ~~~~~~~~~~~~~~~~~~~~~^
+        dialect=dialect,
+        ^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        linting=self.dialect.compiler_linting | compiler.WARN_LINTING,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 715, in _compile_w_cache
+    compiled_sql = self._compiler(
+        dialect,
+    ...<4 lines>...
+        **kw,
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 323, in _compiler
+    return dialect.statement_compiler(dialect, self, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/dialects/oracle/base.py", line 1238, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 1446, in __init__
+    Compiled.__init__(self, dialect, statement, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 886, in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 932, in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/visitors.py", line 138, in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py", line 4781, in visit_select
+    compile_state = select_stmt._compile_state_factory(
+        select_stmt, self, **kwargs
+    )
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/sql/base.py", line 701, in create_for_statement
+    return klass.create_for_statement(statement, compiler, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 447, in create_for_statement
+    return cls._create_orm_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        cast("Union[Select, FromStatement]", statement),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **kw,
+        ^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 1175, in _create_orm_context
+    _QueryEntity.to_compile_state(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<2 lines>...
+        is_current_entities=True,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 2661, in to_compile_state
+    _ColumnEntity._for_columns(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        compile_state,
+        ^^^^^^^^^^^^^^
+    ...<3 lines>...
+        is_current_entities,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 3015, in _for_columns
+    _ORMColumnEntity(
+    ~~~~~~~~~~~~~~~~^
+        compile_state,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        parent_bundle=parent_bundle,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 3235, in __init__
+    _entity._post_inspect
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 1338, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 4218, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/miniconda3/envs/new/lib/python3.14/site-packages/sqlalchemy/orm/mapper.py", line 4255, in _do_configure_registries
+    raise e
+sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[RawWantedJobDetailTag(RAW_WANTED_JOB_DETAIL_TAGS)]'. Original exception was: Mapper 'Mapper[RawWantedJob(RAW_WANTED_JOBS)]' has no property 'detail_tags'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+[2025-12-02 10:01:27] INFO | [SARAMIN] 🏁 종료 (총 0건 저장)
+[2025-12-02 10:01:27] INFO | ============== [모든 크롤러 종료] ==============
+[2025-12-02 10:03:07] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 10:03:07] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 10:03:07] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 10:03:07] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 10:03:07] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 10:03:07] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 10:03:07] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 10:03:08] INFO | [JOBKOREA] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 10:03:08] INFO | [SARAMIN] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 10:03:09] INFO | [WANTED] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 10:03:09] INFO | [WANTED] 💾 DB 저장 중...
+[2025-12-02 10:03:10] INFO | [WANTED] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 10:03:13] INFO | [WANTED] 📄 목록 조회 중... (Index: 20)
+[2025-12-02 10:03:14] INFO | [WANTED] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 10:03:14] INFO | [SARAMIN] 💾 DB 저장 중...
+[2025-12-02 10:03:15] INFO | [SARAMIN] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 10:03:15] INFO | [WANTED] 💾 DB 저장 중...
+[2025-12-02 10:03:16] INFO | [WANTED] ✅ 20건 저장 완료 (누적: 40건)
+[2025-12-02 10:03:16] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 2)
+[2025-12-02 10:03:16] INFO | [SARAMIN] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 10:03:18] INFO | [WANTED] 📄 목록 조회 중... (Index: 40)
+[2025-12-02 10:03:21] INFO | [JOBKOREA] 💾 DB 저장 중...
+[2025-12-02 10:03:21] INFO | [JOBKOREA] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 10:03:21] INFO | [WANTED] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 10:03:23] INFO | [SARAMIN] 💾 DB 저장 중...
+[2025-12-02 10:03:23] INFO | [SARAMIN] ✅ 20건 저장 완료 (누적: 40건)
+[2025-12-02 10:03:23] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 10:03:23] INFO | [JOBKOREA] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 10:03:24] INFO | [WANTED] 💾 DB 저장 중...
+[2025-12-02 10:03:24] INFO | [WANTED] ✅ 20건 저장 완료 (누적: 60건)
+[2025-12-02 10:03:25] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 3)
+[2025-12-02 10:03:25] INFO | [SARAMIN] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 10:03:26] INFO | [WANTED] 📄 목록 조회 중... (Index: 60)
+[2025-12-02 10:03:26] INFO | [WANTED] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 10:03:28] INFO | [SARAMIN] 🏁 종료 (총 40건 저장)
+[2025-12-02 10:03:28] INFO | [JOBKOREA] 🏁 종료 (총 20건 저장)
+[2025-12-02 10:03:28] INFO | [WANTED] 🏁 종료 (총 60건 저장)
+[2025-12-02 11:19:21] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 11:19:22] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 11:19:23] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 11:19:23] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 11:19:23] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 11:19:23] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 11:19:23] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 11:19:23] INFO | [WANTED] 조회: 20건 | 패스: 15건 | 신규: 5건
+[2025-12-02 11:19:24] INFO | [JOBKOREA] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 11:19:24] INFO | [SARAMIN] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 11:19:24] INFO | [WANTED] 💾 DB 저장 중...
+[2025-12-02 11:19:24] INFO | [WANTED] ✅ 5건 저장 완료 (누적: 5건)
+[2025-12-02 11:19:26] INFO | [WANTED] 🏁 종료 (총 5건 저장)
+[2025-12-02 11:19:29] INFO | [SARAMIN] 💾 DB 저장 중...
+[2025-12-02 11:19:29] INFO | [SARAMIN] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 11:19:30] INFO | [SARAMIN] 🏁 종료 (총 20건 저장)
+[2025-12-02 11:19:35] INFO | [JOBKOREA] 💾 DB 저장 중...
+[2025-12-02 11:19:36] INFO | [JOBKOREA] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 11:19:38] INFO | [JOBKOREA] 🏁 종료 (총 20건 저장)
+[2025-12-02 11:19:38] INFO | ============== [모든 크롤러 종료] ==============
+[2025-12-02 11:44:19] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 11:44:20] ERROR | ❌ [NoSQLRepository] 핸들 생성 실패: Package "oci" is required; please install.
+[2025-12-02 11:44:20] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 11:44:21] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 11:44:21] ERROR | ❌ [NoSQLRepository] 핸들 생성 실패: Package "oci" is required; please install.
+[2025-12-02 11:44:21] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 11:44:21] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 11:44:21] ERROR | ❌ [NoSQLRepository] 핸들 생성 실패: Package "oci" is required; please install.
+[2025-12-02 11:44:21] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 11:44:21] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 11:44:22] INFO | [SARAMIN] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 11:44:22] INFO | [WANTED] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 11:44:22] INFO | [JOBKOREA] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 11:44:23] INFO | [WANTED] 💾 DB 저장 중...
+[2025-12-02 11:44:24] INFO | [WANTED] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:24] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:44:25] INFO | [SARAMIN] 🏁 종료 (총 0건 저장)
+[2025-12-02 11:44:25] INFO | [JOBKOREA] 🏁 종료 (총 0건 저장)
+[2025-12-02 11:44:25] INFO | [WANTED] 🏁 종료 (총 20건 저장)
+[2025-12-02 11:46:47] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 11:46:48] ERROR | ❌ [NoSQLRepository] 핸들 생성 실패: Specified region, ap-seoul-1, doesn't match the region in SignatureProvider.
+[2025-12-02 11:46:48] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 11:46:48] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 11:46:48] ERROR | ❌ [NoSQLRepository] 핸들 생성 실패: Specified region, ap-seoul-1, doesn't match the region in SignatureProvider.
+[2025-12-02 11:46:48] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 11:46:48] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 11:46:48] ERROR | ❌ [NoSQLRepository] 핸들 생성 실패: Specified region, ap-seoul-1, doesn't match the region in SignatureProvider.
+[2025-12-02 11:46:48] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 11:46:48] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 11:46:49] INFO | [WANTED] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 11:46:49] INFO | [JOBKOREA] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 11:46:49] INFO | [SARAMIN] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 11:46:50] INFO | [WANTED] 💾 DB 저장 중...
+[2025-12-02 11:46:50] INFO | [WANTED] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 11:46:50] INFO | [SARAMIN] 🏁 종료 (총 0건 저장)
+[2025-12-02 11:46:50] INFO | [JOBKOREA] 🏁 종료 (총 0건 저장)
+[2025-12-02 11:46:50] INFO | [WANTED] 🏁 종료 (총 20건 저장)
+[2025-12-02 11:50:24] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 11:50:24] ERROR | ❌ [NoSQLRepository] 핸들 생성 실패: compartment must be a string that is not empty.
+[2025-12-02 11:50:24] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 11:50:24] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 11:50:24] ERROR | ❌ [NoSQLRepository] 핸들 생성 실패: compartment must be a string that is not empty.
+[2025-12-02 11:50:24] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 11:50:25] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 11:50:25] ERROR | ❌ [NoSQLRepository] 핸들 생성 실패: compartment must be a string that is not empty.
+[2025-12-02 11:50:25] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 11:50:25] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 11:50:25] INFO | [WANTED] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 11:50:25] INFO | [SARAMIN] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 11:50:26] INFO | [JOBKOREA] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 11:50:26] INFO | [SARAMIN] 🏁 종료 (총 0건 저장)
+[2025-12-02 11:50:26] INFO | [WANTED] 🏁 종료 (총 0건 저장)
+[2025-12-02 11:50:26] INFO | [JOBKOREA] 🏁 종료 (총 0건 저장)
+[2025-12-02 12:00:47] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 12:00:48] ERROR | ❌ [NoSQLRepository] 핸들 생성 실패: compartment must be a string that is not empty.
+[2025-12-02 12:00:48] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 12:00:49] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:00:49] ERROR | ❌ [NoSQLRepository] 핸들 생성 실패: compartment must be a string that is not empty.
+[2025-12-02 12:00:49] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 12:00:49] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 12:00:49] ERROR | ❌ [NoSQLRepository] 핸들 생성 실패: compartment must be a string that is not empty.
+[2025-12-02 12:00:49] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 12:00:50] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:00:50] INFO | [WANTED] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 12:00:51] INFO | [JOBKOREA] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 12:00:51] INFO | [SARAMIN] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 12:00:52] INFO | [WANTED] 💾 DB 저장 중...
+[2025-12-02 12:00:53] INFO | [WANTED] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:53] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:00:57] INFO | [WANTED] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:01:01] INFO | [SARAMIN] 💾 DB 저장 중...
+[2025-12-02 12:01:02] INFO | [SARAMIN] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:02] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:05] INFO | [SARAMIN] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:01:07] INFO | [JOBKOREA] 💾 DB 저장 중...
+[2025-12-02 12:01:08] INFO | [JOBKOREA] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:08] WARNING | ⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.
+[2025-12-02 12:01:10] INFO | [JOBKOREA] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:01:10] INFO | ============== [모든 크롤러 종료] ==============
+[2025-12-02 12:04:26] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 12:04:26] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:04:26] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 12:04:26] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:04:27] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:04:27] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 12:04:27] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 12:04:27] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:04:27] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 12:04:27] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:04:27] INFO | [WANTED] 조회: 20건 | 패스: 20건 | 신규: 0건
+[2025-12-02 12:04:28] INFO | [JOBKOREA] 조회: 20건 | 패스: 8건 | 신규: 20건
+[2025-12-02 12:04:28] INFO | [SARAMIN] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 12:04:29] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:04:29] INFO | [WANTED] 🏁 종료 (총 0건 저장)
+[2025-12-02 12:04:33] INFO | [SARAMIN] 💾 DB 저장 중...
+[2025-12-02 12:04:34] INFO | [SARAMIN] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:04:36] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:04:36] INFO | [SARAMIN] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:04:40] INFO | [JOBKOREA] 💾 DB 저장 중...
+[2025-12-02 12:04:40] INFO | [JOBKOREA] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:04:41] INFO | [JOBKOREA] ☁️ OCI NoSQL 20/20건 적재 완료
+[2025-12-02 12:04:44] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:04:44] INFO | [JOBKOREA] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:04:44] INFO | ============== [모든 크롤러 종료] ==============
+[2025-12-02 12:05:26] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 12:05:27] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:05:27] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 12:05:27] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:05:27] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:05:27] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 12:05:27] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 12:05:27] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:05:27] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 12:05:28] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:05:28] INFO | [WANTED] 조회: 20건 | 패스: 20건 | 신규: 0건
+[2025-12-02 12:05:28] INFO | [JOBKOREA] 조회: 20건 | 패스: 20건 | 신규: 20건
+[2025-12-02 12:05:29] INFO | [SARAMIN] 조회: 20건 | 패스: 20건 | 신규: 20건
+[2025-12-02 12:05:30] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:05:30] INFO | [WANTED] 🏁 종료 (총 0건 저장)
+[2025-12-02 12:05:33] INFO | [SARAMIN] 💾 DB 저장 중...
+[2025-12-02 12:05:33] INFO | [SARAMIN] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:34] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): Primary key of 66 exceeded the limit of 64
+[2025-12-02 12:05:36] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:05:36] INFO | [SARAMIN] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:05:39] INFO | [JOBKOREA] 💾 DB 저장 중...
+[2025-12-02 12:05:39] INFO | [JOBKOREA] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:05:42] INFO | [JOBKOREA] ☁️ OCI NoSQL 20/20건 적재 완료
+[2025-12-02 12:05:43] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:05:43] INFO | [JOBKOREA] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:05:43] INFO | ============== [모든 크롤러 종료] ==============
+[2025-12-02 12:20:27] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 12:20:28] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:20:28] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 12:20:28] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:20:29] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:20:29] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 12:20:29] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 12:20:29] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:20:29] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 12:20:29] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:20:30] INFO | [WANTED] 조회: 20건 | 패스: 20건 | 신규: 0건
+[2025-12-02 12:20:30] INFO | [JOBKOREA] 조회: 20건 | 패스: 9건 | 신규: 20건
+[2025-12-02 12:20:30] INFO | [SARAMIN] 조회: 20건 | 패스: 5건 | 신규: 20건
+[2025-12-02 12:20:32] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:20:32] INFO | [WANTED] 🏁 종료 (총 0건 저장)
+[2025-12-02 12:20:34] INFO | [SARAMIN] 💾 DB 저장 중...
+[2025-12-02 12:20:35] INFO | [SARAMIN] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:35] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:38] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:20:38] INFO | [SARAMIN] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:20:40] INFO | [JOBKOREA] 💾 DB 저장 중...
+[2025-12-02 12:20:40] INFO | [JOBKOREA] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:20:41] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:41] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:41] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:41] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:41] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:41] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:41] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:41] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:41] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:41] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:42] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:42] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:42] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:42] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:42] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:42] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:42] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:42] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:42] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:42] ERROR | ❌ [NoSQLRepository] 저장 실패 (ID: None): PUT: Illegal Argument: Missing primary key field: id
+[2025-12-02 12:20:43] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:20:43] INFO | [JOBKOREA] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:20:43] INFO | ============== [모든 크롤러 종료] ==============
+[2025-12-02 12:22:37] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 12:22:38] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:22:38] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 12:22:38] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:22:39] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:22:39] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 12:22:39] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 12:22:39] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:22:39] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 12:22:39] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:22:40] INFO | [JOBKOREA] 조회: 20건 | 패스: 13건 | 신규: 20건
+[2025-12-02 12:22:40] INFO | [SARAMIN] 조회: 20건 | 패스: 20건 | 신규: 20건
+[2025-12-02 12:22:41] INFO | [WANTED] 조회: 20건 | 패스: 20건 | 신규: 0건
+[2025-12-02 12:22:42] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:22:42] INFO | [WANTED] 🏁 종료 (총 0건 저장)
+[2025-12-02 12:22:45] INFO | [SARAMIN] 💾 DB 저장 중...
+[2025-12-02 12:22:46] INFO | [SARAMIN] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:22:46] INFO | [SARAMIN] ☁️ OCI NoSQL 20/20건 적재 완료
+[2025-12-02 12:22:49] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:22:49] INFO | [SARAMIN] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:22:50] INFO | [JOBKOREA] 💾 DB 저장 중...
+[2025-12-02 12:22:51] INFO | [JOBKOREA] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:22:51] INFO | [JOBKOREA] ☁️ OCI NoSQL 20/20건 적재 완료
+[2025-12-02 12:22:54] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:22:54] INFO | [JOBKOREA] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:22:54] INFO | ============== [모든 크롤러 종료] ==============
+[2025-12-02 12:31:44] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 12:31:44] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:31:44] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 12:31:45] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:31:45] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:31:45] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 12:31:45] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 12:31:45] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:31:45] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 12:31:45] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:31:46] INFO | [WANTED] 조회: 20건 | 패스: 20건 | 신규: 0건
+[2025-12-02 12:31:46] INFO | [JOBKOREA] 조회: 20건 | 패스: 15건 | 신규: 5건
+[2025-12-02 12:31:46] INFO | [SARAMIN] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 12:31:48] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:31:48] INFO | [WANTED] 🏁 종료 (총 0건 저장)
+[2025-12-02 12:31:49] INFO | [JOBKOREA] 💾 DB 저장 중...
+[2025-12-02 12:31:49] INFO | [JOBKOREA] ✅ 5건 저장 완료 (누적: 5건)
+[2025-12-02 12:31:49] INFO | [JOBKOREA] ☁️ OCI NoSQL 5/5건 적재 완료
+[2025-12-02 12:31:51] INFO | [SARAMIN] 💾 DB 저장 중...
+[2025-12-02 12:31:51] INFO | [SARAMIN] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:31:51] INFO | [SARAMIN] ☁️ OCI NoSQL 20/20건 적재 완료
+[2025-12-02 12:31:51] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:31:51] INFO | [JOBKOREA] 🏁 종료 (총 5건 저장)
+[2025-12-02 12:31:52] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:31:52] INFO | [SARAMIN] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:31:52] INFO | ============== [모든 크롤러 종료] ==============
+[2025-12-02 12:49:13] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 12:49:13] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:49:13] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 12:49:14] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:49:15] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:49:15] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 12:49:15] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 12:49:15] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:49:15] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 12:49:15] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:49:16] INFO | [WANTED] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 12:49:16] INFO | [SARAMIN] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 12:49:17] INFO | [JOBKOREA] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 12:49:17] INFO | [WANTED] 💾 DB 저장 중...
+[2025-12-02 12:49:18] INFO | [WANTED] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:49:18] INFO | [WANTED] ☁️ OCI NoSQL 20/20건 적재 완료
+[2025-12-02 12:49:23] INFO | [SARAMIN] 💾 DB 저장 중...
+[2025-12-02 12:49:23] INFO | [SARAMIN] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:49:24] INFO | [SARAMIN] ☁️ OCI NoSQL 20/20건 적재 완료
+[2025-12-02 12:49:25] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:49:25] INFO | [WANTED] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:49:29] INFO | [JOBKOREA] 💾 DB 저장 중...
+[2025-12-02 12:49:30] INFO | [JOBKOREA] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:49:30] INFO | [JOBKOREA] ☁️ OCI NoSQL 20/20건 적재 완료
+[2025-12-02 12:49:31] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:49:31] INFO | [SARAMIN] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:49:34] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:49:34] INFO | [JOBKOREA] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:49:34] INFO | ============== [모든 크롤러 종료] ==============
+[2025-12-02 12:58:18] INFO | ============== [통합 크롤러 시작] ==============
+[2025-12-02 12:58:18] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:58:19] INFO | ⚡ [NoSQLRepository] 중복 확인 쿼리 Prepare 완료
+[2025-12-02 12:58:19] INFO | 🚀 [WANTED] 크롤링 시작
+[2025-12-02 12:58:19] INFO | [WANTED] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:58:19] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:58:19] INFO | ⚡ [NoSQLRepository] 중복 확인 쿼리 Prepare 완료
+[2025-12-02 12:58:19] INFO | 🚀 [SARAMIN] 크롤링 시작
+[2025-12-02 12:58:19] INFO | [SARAMIN] 📄 목록 조회 중... (Index: 1)
+[2025-12-02 12:58:20] INFO | ✅ [NoSQLRepository] 핸들 생성 성공
+[2025-12-02 12:58:20] INFO | ⚡ [NoSQLRepository] 중복 확인 쿼리 Prepare 완료
+[2025-12-02 12:58:20] INFO | 🚀 [JOBKOREA] 크롤링 시작
+[2025-12-02 12:58:20] INFO | [JOBKOREA] 📄 목록 조회 중... (Index: 0)
+[2025-12-02 12:58:20] INFO | [WANTED] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 12:58:21] INFO | [JOBKOREA] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 12:58:21] INFO | [SARAMIN] 조회: 20건 | 패스: 0건 | 신규: 20건
+[2025-12-02 12:58:22] INFO | [WANTED] 💾 DB 저장 중...
+[2025-12-02 12:58:22] INFO | [WANTED] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:58:22] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/326161/details
+[2025-12-02 12:58:23] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/326520/details
+[2025-12-02 12:58:23] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/326517/details
+[2025-12-02 12:58:23] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/281411/details
+[2025-12-02 12:58:24] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/326515/details
+[2025-12-02 12:58:24] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/326512/details
+[2025-12-02 12:58:25] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/326511/details
+[2025-12-02 12:58:26] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/326510/details
+[2025-12-02 12:58:27] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/326509/details
+[2025-12-02 12:58:27] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/250859/details
+[2025-12-02 12:58:28] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/326508/details
+[2025-12-02 12:58:29] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/319764/details
+[2025-12-02 12:58:29] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/326499/details
+[2025-12-02 12:58:30] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/326167/details
+[2025-12-02 12:58:31] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/322373/details
+[2025-12-02 12:58:31] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/326497/details
+[2025-12-02 12:58:32] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/326498/details
+[2025-12-02 12:58:32] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/265930/details
+[2025-12-02 12:58:33] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/275708/details
+[2025-12-02 12:58:33] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.wanted.co.kr/api/chaos/jobs/v4/324857/details
+[2025-12-02 12:58:41] INFO | [SARAMIN] 💾 DB 저장 중...
+[2025-12-02 12:58:43] INFO | [SARAMIN] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:58:43] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463963
+[2025-12-02 12:58:44] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463952
+[2025-12-02 12:58:45] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463904
+[2025-12-02 12:58:46] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463886
+[2025-12-02 12:58:47] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463860
+[2025-12-02 12:58:48] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463833
+[2025-12-02 12:58:49] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463831
+[2025-12-02 12:58:50] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463829
+[2025-12-02 12:58:51] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463816
+[2025-12-02 12:58:52] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463813
+[2025-12-02 12:58:53] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463811
+[2025-12-02 12:58:54] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463790
+[2025-12-02 12:58:55] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463786
+[2025-12-02 12:58:56] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463783
+[2025-12-02 12:58:57] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463772
+[2025-12-02 12:58:58] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463759
+[2025-12-02 12:58:59] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463746
+[2025-12-02 12:59:00] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463744
+[2025-12-02 12:59:01] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463743
+[2025-12-02 12:59:02] INFO | ⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=52463741
+[2025-12-02 12:59:03] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:59:03] INFO | [WANTED] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:59:05] INFO | [JOBKOREA] 💾 DB 저장 중...
+[2025-12-02 12:59:06] INFO | [JOBKOREA] ✅ 20건 저장 완료 (누적: 20건)
+[2025-12-02 12:59:25] INFO | [JOBKOREA] ☁️ OCI NoSQL 20/20건 적재 완료
+[2025-12-02 12:59:25] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:59:25] INFO | [SARAMIN] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:59:31] INFO | 🔒 [NoSQLRepository] 핸들 종료
+[2025-12-02 12:59:31] INFO | [JOBKOREA] 🏁 종료 (총 20건 저장)
+[2025-12-02 12:59:31] INFO | ============== [모든 크롤러 종료] ==============
