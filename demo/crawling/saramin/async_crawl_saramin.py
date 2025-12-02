@@ -228,5 +228,5 @@ async def main(url, k):
 # --- 스크립트 실행 ---
 if __name__ == "__main__":
     BASE_URL = "https://www.saramin.co.kr/zf_user/jobs/list/domestic?loc_mcd=101000"
-    asyncio.run(main(BASE_URL, k=5))
+    asyncio.run(main(BASE_URL, k=3))
     

@@ -104,17 +104,17 @@ async def crawl_job_page(context, job_url, semaphore):
                 await page.close()
 
 @async_timer
-async def main(url):
+async def main(url, k):
     output_filename = "./wanted_jobs.jsonl"
 
     all_job_data = []
-    semaphore = asyncio.Semaphore(5)
+    semaphore = asyncio.Semaphore(k)
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         context = await browser.new_context(user_agent=USER_AGENT)
 
         page = await context.new_page()
-        await page.goto(url, timeout=10000)
+        await page.goto(url, timeout=60000)
 
         job_list_selector = "ul[data-cy='job-list'] li.Card_Card__aaatv a[href^='/wd/']"
         await page.wait_for_selector(job_list_selector, timeout=10000)
@@ -147,4 +147,4 @@ async def main(url):
 
 if __name__ == "__main__":
     BASE_URL = "https://www.wanted.co.kr/wdlist?country=kr&job_sort=job.popularity_order&years=-1&locations=all"
-    asyncio.run(main(BASE_URL))
+    asyncio.run(main(BASE_URL, k=3))

@@ -184,7 +184,7 @@ def crawl_job_tag(soup):
     return [tag.text.strip() for tag in tag_items]
 
 @async_timer
-async def main(url):
+async def main(url, k):
     try:
         response = requests.get(url, headers={'User-Agent': USER_AGENT})
         response.raise_for_status()
@@ -203,7 +203,7 @@ async def main(url):
     output_filename = "./jobkorea_jobs.jsonl"
     base_url = "https://www.jobkorea.co.kr"
     all_job_data = []
-    semaphore = asyncio.Semaphore(5)
+    semaphore = asyncio.Semaphore(k)
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         context = await browser.new_context(user_agent=USER_AGENT)
@@ -226,5 +226,5 @@ async def main(url):
 
 if __name__ == "__main__":
     BASE_URL = "https://www.jobkorea.co.kr/Search/?stext="
-    asyncio.run(main(BASE_URL))
+    asyncio.run(main(BASE_URL, k=3))
     
