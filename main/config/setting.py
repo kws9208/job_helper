@@ -8,7 +8,7 @@ load_dotenv()
 class Setting:
     # ATP settings
     ORACLE_USER = os.getenv("ORACLE_USER")
-    ORACLE_PASSWORD = os.getenv("ORACLE_USER_PASSWORD")
+    ORACLE_USER_PASSWORD = os.getenv("ORACLE_USER_PASSWORD")
     ORACLE_DSN = os.getenv("ORACLE_DSN")
     WALLET_DIR = os.getenv("WALLET_DIR")
     WALLET_PASSWORD = os.getenv("WALLET_PASSWORD")

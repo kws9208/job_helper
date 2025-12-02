@@ -114,7 +114,6 @@ async def run_crawler_task(platform_name, crawler_instance):
                 
                 sleep_time = random.uniform(3, 7)
                 await asyncio.sleep(sleep_time)
-                break
 
     except Exception as e:
         session.rollback()
