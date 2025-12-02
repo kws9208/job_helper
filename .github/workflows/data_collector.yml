@@ -1,0 +1,51 @@
+name: Data Collector
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  data-collect:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+
+    - name: Set up Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.14'
+
+    - name: Install dependencies
+      run: |
+        pip install httpx requests bs4 html2text emoji sqlalchemy dotenv oracledb borneo oci
+
+    - name: Create OCI Config & Key File
+      run: |
+        mkdir -p ~/.oci
+        echo "${{ secrets.OCI_CONFIG_CONTENT }}" > ~/.oci/config
+        echo "${{ secrets.OCI_KEY_FILE_CONTENT }}" > ~/.oci/oci_api_key.pem
+        chmod 600 ~/.oci/oci_api_key.pem
+
+    - name: Setup Oracle Wallet
+      run: |
+        echo "${{ secrets.ORACLE_WALLET }}" | base64 --decode > wallet.zip
+        unzip wallet.zip -d Wallet
+
+    - name: Data Collector
+      working-directory: ./main
+      env:
+        ORACLE_USER: ${{ secrets.ORACLE_USER }}
+        ORACLE_PASSWORD: ${{ secrets.ORACLE_PASSWORD }}
+        ORACLE_DSN: ${{ secrets.ORACLE_DSN }}
+        WALLET_DIR: ${{ github.workspace }}/Wallet
+        WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
+
+        COMPARTMENT_OCID: ${{ secrets.COMPARTMENT_OCID }}
+        NOSQL_TABLE_NAME: ${{ secrets.NOSQL_TABLE_NAME }}
+      run: |
+        python data_collector.py
