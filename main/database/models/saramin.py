@@ -60,7 +60,7 @@ class RawSaraminJobBenefit(Base):
     __tablename__ = 'RAW_SARAMIN_JOB_BENEFITS'
     benefit_id = Column(Integer, primary_key=True, autoincrement=True)
     rec_idx = Column(Integer, ForeignKey('RAW_SARAMIN_JOBS.rec_idx'), nullable=False)
-    benefit_text = Column(String(500))
+    benefit_text = Column(String(1000))
 
     job = relationship("RawSaraminJob", back_populates="benefits")
     

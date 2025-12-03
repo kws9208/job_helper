@@ -115,7 +115,9 @@ class JobkoreaCrawler(BaseCrawler):
         response = await self.request("GET", f'{self.job_basic_url}/{gno}', headers=self.header)
         html_content = response.text
         soup = BeautifulSoup(html_content, 'html.parser')
-        position = soup.select_one('h1.recruit-title').text.strip()
+
+        if has_info := soup.select_one('div.recruit-article-content'):
+            position = has_info.select_one('h1.recruit-title').text.strip()
         is_active = not soup.select('div.navbarFooter > button')[-1].get('disabled')
 
         return {

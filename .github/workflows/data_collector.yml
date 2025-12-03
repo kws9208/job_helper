@@ -40,7 +40,7 @@ jobs:
       working-directory: ./main
       env:
         ORACLE_USER: ${{ secrets.ORACLE_USER }}
-        ORACLE_PASSWORD: ${{ secrets.ORACLE_PASSWORD }}
+        ORACLE_USER_PASSWORD: ${{ secrets.ORACLE_USER_PASSWORD }}
         ORACLE_DSN: ${{ secrets.ORACLE_DSN }}
         WALLET_DIR: ${{ github.workspace }}/Wallet
         WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}

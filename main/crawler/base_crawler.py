@@ -17,26 +17,36 @@ class BaseCrawler(ABC):
         if self.client is None:
             raise RuntimeError("Client Session is not initialized. Use 'async with' context.")
 
-        async with self.semaphore:
-            try:
-                response = await self.client.request(method, url, **kwargs)
-                if response.status_code == 302:
-                    print(f"🚫 [Pass] 공고가 삭제되거나 검수 중입니다. (Location: {response.headers.get('Location')})")
-                    return None
-                    
-                response.raise_for_status()
-                return response
-            except httpx.RequestError as e:
-                print(f"[요청 에러] {e.request.url!r} - {e}")
-                raise
-            except httpx.HTTPStatusError as e:
-                print(f"[상태 코드 에러] {e.response.status_code} - {e.request.url!r}")
-                raise
+        retries = 5
+        for attempt in range(1, retries + 1):
+            async with self.semaphore:
+                try:
+                    response = await self.client.request(method, url, **kwargs)
+                    if response.status_code in [302, 503]:
+                        print(f"🚫 [Pass] 공고가 삭제되거나 검수 중입니다. (Location: {response.headers.get('Location')})")
+                        return None
+                        
+                    response.raise_for_status()
+                    return response
+                except (httpx.ConnectTimeout, httpx.ReadTimeout, httpx.RemoteProtocolError) as e:
+                    if attempt == retries:
+                        print(f"🔥 [최종 실패] {self.platform} | {url} - {e}")
+                        raise
+                    wait_time = 2 ** attempt # 2초, 4초...
+                    print(f"⚠️ [재시도 {attempt}/{retries}] {self.platform} | 연결 지연 발생. {wait_time}초 후 재시도... ({e})")
+                    await asyncio.sleep(wait_time)
+                except httpx.RequestError as e:
+                    print(f"[요청 에러] {e.request.url!r} - {e}")
+                    raise
+                except httpx.HTTPStatusError as e:
+                    print(f"[상태 코드 에러] {e.response.status_code} - {e.request.url!r}")
+                    raise
     
     async def __aenter__(self):
         self.client = httpx.AsyncClient(
             headers=self.header,
-            timeout=httpx.Timeout(10.0, connect=5.0)
+            timeout=httpx.Timeout(15.0, connect=15.0),
+            follow_redirects=True
         )
         return self
 

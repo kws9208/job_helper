@@ -12,7 +12,7 @@ def get_engine():
             "wallet_password": Setting.WALLET_PASSWORD
         }
 
-    db_url = f"oracle+oracledb://{Setting.ORACLE_USER}:{Setting.ORACLE_PASSWORD}@{Setting.ORACLE_DSN}"
+    db_url = f"oracle+oracledb://{Setting.ORACLE_USER}:{Setting.ORACLE_USER_PASSWORD}@{Setting.ORACLE_DSN}"
     
     engine = create_engine(
         db_url, 
