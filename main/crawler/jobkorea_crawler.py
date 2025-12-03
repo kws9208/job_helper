@@ -76,8 +76,8 @@ class JobkoreaCrawler(BaseCrawler):
             deadline = " ".join(dates[-1].stripped_strings).replace("채용시","").replace("마감","").replace("\n","").strip()
             if "시작" in deadline:
                 deadline = "상시채용"
-        elif dates := soup.select('ul.view-top-list > li'):
-            deadline = dates[-1].contents[0].strip()
+        elif dates := soup.select_one('ul.view-top-list > li.vl-date'):
+            deadline = dates.contents[0].strip()
 
         if has_company := soup.select_one('#rowCompany'):
             if has_company.select_one('div.companyHeader'):
@@ -86,11 +86,17 @@ class JobkoreaCrawler(BaseCrawler):
                 company_name = has_company.select_one('div.info-company > p').text.strip()
             summary_dict.update({"company_name": company_name})
 
-            if has_company.select_one('div.row-footer'):
-                company_id = has_company.select_one('div.row-footer > a').get('href').split('/')[-1].split('?')[0]
-            elif has_company.select_one('div.header_wrap'):
-                company_id = has_company.select_one('div.header_wrap > a').get('href').split('/')[2]
-            summary_dict.update({"company_id": company_id})
+            for selector in ['div.row-footer > a', 'div.header_wrap > a']:
+                if company_id := has_company.select_one(selector):
+                    company_id = company_id.get('href')
+                    if "company" in company_id:
+                        company_id = company_id.split('/')[2].split('?')[0]
+                    elif "Recruit" in company_id:
+                        company_id = company_id.split('?')[0].split('/')[-1]
+                    else:
+                        company_id = company_id.split('?')[0].split('/')[-1]
+                    summary_dict.update({"company_id": company_id})
+                    break
 
         if has_tag := soup.select_one('#rowKeyword'):
             related_tags = has_tag.select_one('div.keyword-list').text.strip().split('\n')
@@ -106,10 +112,11 @@ class JobkoreaCrawler(BaseCrawler):
             benefit_items = soup.select('ul.info-company-tag > li')
             benefits = [item.text.strip() for item in benefit_items]
 
-        has_address = soup.select_one('div.row.rowLocation')
-        if has_address:
+        if has_address := soup.select_one('div.row.rowLocation'):
             address = has_address.select_one('div.workAddr').text.strip()
-        elif has_address := soup.select_one('#rowCompany'):
+        elif has_address := soup.select_one('#rowCompany > div.generalSummary'):
+            address = None
+        elif has_address := soup.select_one('#rowCompany > ul.info-company-list'):
             address = soup.select_one('ul.info-company-list > li:nth-child(4) > dl > dd').contents[0].strip()
 
         response = await self.request("GET", f'{self.job_basic_url}/{gno}', headers=self.header)
@@ -211,12 +218,11 @@ async def main():
         if results:
             print(f"\n✅ 총 {len(results)}개의 공고 수집 완료!")
             print("--- [첫 번째 공고 샘플 데이터] ---")
-            pprint.pprint(results)
+            pprint.pprint(results[0])
             print([res['position'] for res in results])
         else:
             print("\n❌ 수집된 데이터가 없습니다.")
         print("소요시간:", end - start)
-        # pprint.pprint(await crawler.fetch_job_detail(48147634))
 
 if __name__ == "__main__":
     asyncio.run(main())
