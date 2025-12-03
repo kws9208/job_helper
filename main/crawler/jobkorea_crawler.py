@@ -19,7 +19,7 @@ class JobkoreaCrawler(BaseCrawler):
         self.job_summary_info = "https://m.jobkorea.co.kr/Recruit/SwipeGIReadInfo"
         self.job_basic_url = "https://m.jobkorea.co.kr/Recruit/GI_Read"
         self.payload = {
-            "page": 10,
+            "page": 0,
             "pageSize": 20,
             "sortProperty": "2",
             "sortDirection": "DESC",
@@ -76,8 +76,8 @@ class JobkoreaCrawler(BaseCrawler):
             deadline = " ".join(dates[-1].stripped_strings).replace("채용시","").replace("마감","").replace("\n","").strip()
             if "시작" in deadline:
                 deadline = "상시채용"
-        elif dates := soup.select('ul.view-top-list > li'):
-            deadline = dates[-1].contents[0].strip()
+        elif dates := soup.select_one('ul.view-top-list > li.vl-date'):
+            deadline = dates.contents[0].strip()
 
         if has_company := soup.select_one('#rowCompany'):
             if has_company.select_one('div.companyHeader'):
@@ -89,11 +89,14 @@ class JobkoreaCrawler(BaseCrawler):
             for selector in ['div.row-footer > a', 'div.header_wrap > a']:
                 if company_id := has_company.select_one(selector):
                     company_id = company_id.get('href')
-                    if "Company" in company_id:
-                        company_id = company_id.split('/')[2]
+                    if "company" in company_id:
+                        company_id = company_id.split('/')[2].split('?')[0]
                     elif "Recruit" in company_id:
                         company_id = company_id.split('?')[0].split('/')[-1]
-            summary_dict.update({"company_id": company_id})
+                    else:
+                        company_id = company_id.split('?')[0].split('/')[-1]
+                    summary_dict.update({"company_id": company_id})
+                    break
 
         if has_tag := soup.select_one('#rowKeyword'):
             related_tags = has_tag.select_one('div.keyword-list').text.strip().split('\n')
@@ -109,12 +112,11 @@ class JobkoreaCrawler(BaseCrawler):
             benefit_items = soup.select('ul.info-company-tag > li')
             benefits = [item.text.strip() for item in benefit_items]
 
-        has_address = soup.select_one('div.row.rowLocation')
-        if has_address:
+        if has_address := soup.select_one('div.row.rowLocation'):
             address = has_address.select_one('div.workAddr').text.strip()
-        elif soup.select_one('#rowCompany > div.generalSummary'):
+        elif has_address := soup.select_one('#rowCompany > div.generalSummary'):
             address = None
-        elif soup.select_one('#rowCompany > ul.info-company-list'):
+        elif has_address := soup.select_one('#rowCompany > ul.info-company-list'):
             address = soup.select_one('ul.info-company-list > li:nth-child(4) > dl > dd').contents[0].strip()
 
         response = await self.request("GET", f'{self.job_basic_url}/{gno}', headers=self.header)
