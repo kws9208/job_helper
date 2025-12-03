@@ -22,7 +22,7 @@ class BaseCrawler(ABC):
             async with self.semaphore:
                 try:
                     response = await self.client.request(method, url, **kwargs)
-                    if response.status_code == 302:
+                    if response.status_code == 302, 503:
                         print(f"🚫 [Pass] 공고가 삭제되거나 검수 중입니다. (Location: {response.headers.get('Location')})")
                         return None
                         
