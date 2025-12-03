@@ -19,7 +19,7 @@ class JobkoreaCrawler(BaseCrawler):
         self.job_summary_info = "https://m.jobkorea.co.kr/Recruit/SwipeGIReadInfo"
         self.job_basic_url = "https://m.jobkorea.co.kr/Recruit/GI_Read"
         self.payload = {
-            "page": 0,
+            "page": 10,
             "pageSize": 20,
             "sortProperty": "2",
             "sortDirection": "DESC",
@@ -86,10 +86,13 @@ class JobkoreaCrawler(BaseCrawler):
                 company_name = has_company.select_one('div.info-company > p').text.strip()
             summary_dict.update({"company_name": company_name})
 
-            if has_company.select_one('div.row-footer'):
-                company_id = has_company.select_one('div.row-footer > a').get('href').split('/')[-1].split('?')[0]
-            elif has_company.select_one('div.header_wrap'):
-                company_id = has_company.select_one('div.header_wrap > a').get('href').split('/')[2]
+            for selector in ['div.row-footer > a', 'div.header_wrap > a']:
+                if company_id := has_company.select_one(selector):
+                    company_id = company_id.get('href')
+                    if "Company" in company_id:
+                        company_id = company_id.split('/')[2]
+                    elif "Recruit" in company_id:
+                        company_id = company_id.split('?')[0].split('/')[-1]
             summary_dict.update({"company_id": company_id})
 
         if has_tag := soup.select_one('#rowKeyword'):
@@ -109,7 +112,9 @@ class JobkoreaCrawler(BaseCrawler):
         has_address = soup.select_one('div.row.rowLocation')
         if has_address:
             address = has_address.select_one('div.workAddr').text.strip()
-        elif has_address := soup.select_one('#rowCompany'):
+        elif soup.select_one('#rowCompany > div.generalSummary'):
+            address = None
+        elif soup.select_one('#rowCompany > ul.info-company-list'):
             address = soup.select_one('ul.info-company-list > li:nth-child(4) > dl > dd').contents[0].strip()
 
         response = await self.request("GET", f'{self.job_basic_url}/{gno}', headers=self.header)
@@ -211,12 +216,11 @@ async def main():
         if results:
             print(f"\n✅ 총 {len(results)}개의 공고 수집 완료!")
             print("--- [첫 번째 공고 샘플 데이터] ---")
-            pprint.pprint(results)
+            pprint.pprint(results[0])
             print([res['position'] for res in results])
         else:
             print("\n❌ 수집된 데이터가 없습니다.")
         print("소요시간:", end - start)
-        # pprint.pprint(await crawler.fetch_job_detail(48147634))
 
 if __name__ == "__main__":
     asyncio.run(main())
