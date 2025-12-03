@@ -36,7 +36,8 @@ class BaseCrawler(ABC):
     async def __aenter__(self):
         self.client = httpx.AsyncClient(
             headers=self.header,
-            timeout=httpx.Timeout(10.0, connect=5.0)
+            timeout=httpx.Timeout(15.0, connect=15.0),
+            follow_redirects=True
         )
         return self
 
