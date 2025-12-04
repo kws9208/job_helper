@@ -61,16 +61,20 @@ class JobkoreaCrawler(BaseCrawler):
         soup = BeautifulSoup(html_content, 'html.parser')
         
         summary_dict = dict()
-        summary_items = soup.select('div#rowGuidelines > div.field')
-        for item in summary_items:
-            key = item.select_one('div.label').text.strip()
-            value = item.select_one('div.value').get_text(separator=" ", strip=True)
-            if key == "경력":
-                summary_dict.update({"career": value})
-            elif key == "학력":
-                summary_dict.update({"education": value})
-            elif key == "고용형태":
-                summary_dict.update({"employment_type": value})
+        if summary_items := soup.select('div#rowGuidelines'):
+            for item in summary_items.select('div.field'):
+                key = item.select_one('div.label').text.strip()
+                value = item.select_one('div.value').get_text(separator=" ", strip=True)
+                if key == "경력":
+                    summary_dict.update({"career": value})
+                elif key == "학력":
+                    summary_dict.update({"education": value})
+                elif key == "고용형태":
+                    summary_dict.update({"employment_type": value})
+        else:
+            summary_dict.update({
+                'career': soup.select_one('ul.view-top-list > li.vl-history').text.strip()
+            })
 
         if dates := soup.select('div.receiptTermDate'):
             deadline = " ".join(dates[-1].stripped_strings).replace("채용시","").replace("마감","").replace("\n","").strip()

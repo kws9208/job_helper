@@ -25,7 +25,7 @@ class RawJobkoreaJob(Base):
     content_type = Column(String(20))
     full_text = Column(Text)
 
-    employment_type = Column(String(100))
+    employment_type = Column(String(200))
     deadline = Column(String(50))
     address = Column(String(500))
     career = Column(String(100))
