@@ -1,8 +1,6 @@
 name: Data Collector
 
 on:
-  push:
-    branches: [ "main", "develop" ]
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
