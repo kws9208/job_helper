@@ -61,7 +61,7 @@ class JobkoreaCrawler(BaseCrawler):
         soup = BeautifulSoup(html_content, 'html.parser')
         
         summary_dict = dict()
-        if summary_items := soup.select('div#rowGuidelines'):
+        if summary_items := soup.select_one('div#rowGuidelines'):
             for item in summary_items.select('div.field'):
                 key = item.select_one('div.label').text.strip()
                 value = item.select_one('div.value').get_text(separator=" ", strip=True)
