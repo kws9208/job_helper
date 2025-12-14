@@ -8,6 +8,15 @@ class RawSaraminCompany(Base):
 
     csn = Column(String(100), primary_key=True)
     company_name = Column(String(200), nullable=False)
+    introduction = Column(Text)
+    industry = Column(String(200))
+    employees = Column(String(100))
+    classification = Column(String(100))
+    foundation_date = Column(String(100))
+    address = Column(String(500))
+    company_url = Column(String(500))
+    company_logo_url = Column(String(500))
+    crawled_at = Column(TIMESTAMP, server_default=func.now())
 
     jobs = relationship("RawSaraminJob", back_populates="company")
 
