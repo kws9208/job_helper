@@ -8,6 +8,16 @@ class RawWantedCompany(Base):
 
     company_id = Column(Integer, primary_key=True)
     company_name = Column(String(200), nullable=False)
+    introduction = Column(Text)
+    founded_year = Column(Integer)
+    industry = Column(String(200))
+    employees = Column(String(100))
+    classification = Column(String(100))
+    address = Column(String(500))
+    company_url = Column(String(500))
+    company_logo_url = Column(String(500))
+    reg_no_hash = Column(String(200))
+    crawled_at = Column(TIMESTAMP, server_default=func.now())
 
     jobs = relationship("RawWantedJob", back_populates="company")
 

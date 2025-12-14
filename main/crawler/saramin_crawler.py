@@ -1,19 +1,17 @@
 from .base_crawler import BaseCrawler
 import time
 import asyncio
-import httpx
 import json
-import traceback
-import requests
 import pprint
 from bs4 import BeautifulSoup
 import html2text
 import re
 import emoji
+from utils.logger import setup_logger
 
 class SaraminCrawler(BaseCrawler):
-    def __init__(self, k=5):
-        super().__init__(base_url="https://www.saramin.co.kr", platform="Saramin", k=k)
+    def __init__(self, logger, k=5):
+        super().__init__(base_url="https://www.saramin.co.kr", platform="Saramin", logger=logger, k=k)
         self.job_list_url = self.base_url + "/zf_user/jobs/list/job-category"
         self.job_detail_url = "https://www.saramin.co.kr/zf_user/jobs/relay/view-detail" # "https://m.saramin.co.kr/job-search/view-frame" # 모바일 데이터 로딩 X
         self.job_summary_url = "https://m.saramin.co.kr/job-search/view-card" # https://www.saramin.co.kr/zf_user/jobs/relay/view-ajax POST rec_idx 52323189
@@ -25,6 +23,7 @@ class SaraminCrawler(BaseCrawler):
             "sort": "reg_dt",
         }
 
+        self.logger = logger.getChild("Saramin")
         self.keyword = ['주요업무', '담당업무', '자격요건', '우대사항', '지원자격', '모집부문', '근무조건', '전형절차', \
                           '자격', '우대', '모집', '업무', '지원', '전형', '마감', '근무']
         
@@ -41,7 +40,6 @@ class SaraminCrawler(BaseCrawler):
         return rec_indices
 
     async def fetch_details_by_ids(self, job_ids):
-        print(f" {self.platform} | 🔍 {len(job_ids)}개의 상세 페이지 수집 시작...")
         tasks = [self.fetch_job_detail(job_id) for job_id in job_ids]
         results = await asyncio.gather(*tasks)
         return [job for job in results if job is not None]
@@ -53,13 +51,23 @@ class SaraminCrawler(BaseCrawler):
         html_content = response.text
 
         job_summaray = await self.fetch_job_summary(rec_idx)
+        
         detail_contents = self.get_detailed_contents(html_content)
 
+        company_info = dict()
+        if job_summaray["company_info"]:
+            if company_url := job_summaray["company_info"]["company_url"]:
+                company_info = await self.fetch_company_info(company_url)
+            company_info = company_info | job_summaray.pop("company_info")
+        else:
+            del job_summaray["company_info"]
+
         return {
-            "rec_idx": rec_idx,
-            "job_url": f"https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx={rec_idx}",
-            **job_summaray, 
-            **detail_contents
+            "company": company_info,
+            "job": {
+                **job_summaray, 
+                **detail_contents
+            }
         }
     
     async def fetch_job_summary(self, rec_idx):
@@ -110,14 +118,26 @@ class SaraminCrawler(BaseCrawler):
             elif address_classname == 'wrap_map_corp':
                 address = address_tags.select_one('address.txt_address').text.strip()
 
-        has_corperation_info = soup.find("h2", string=lambda text: text and "기업정보" in text)
-        if has_corperation_info:
-            corperation_info_list = has_corperation_info.find_next_sibling().select('div.detail_corp > dl')
-            corperation_info = []
-            for corp_info in corperation_info_list:
-                title = corp_info.select_one('dt').text.strip()
-                description = corp_info.select_one('dd').contents[0].strip()
-                corperation_info.append(f"{title}: {description}")
+        has_company_info = soup.find("h2", string=lambda text: text and "기업정보" in text)
+        if has_company_info:
+            company_info_list = has_company_info.find_next_sibling().select('div.detail_corp > dl')
+            company_info = dict()
+            for corp_info in company_info_list:
+                key = corp_info.select_one('dt').text.strip()
+                value = corp_info.select_one('dd').contents[0].strip()
+                if key == "기업형태":
+                    company_info.update({"classification": value})
+                if key == "사원수":
+                    company_info.update({"employees": value.replace("명","")})
+                if key == "설립일":
+                    company_info.update({"foundation_date": value})
+                if key == "주소":
+                    company_info.update({"address": value})
+            company_info.update({
+                "csn": csn,
+                "company_name": company_name,
+                "company_url": f"https://m.saramin.co.kr/job-search/company-info-view?csn={csn}"
+            })
 
         has_related_tags = soup.find('section', attrs={'data-layer':'relatetags'})
         if has_related_tags:
@@ -125,18 +145,19 @@ class SaraminCrawler(BaseCrawler):
             related_tags = [tag.text.strip() for tag in relation_tag_list if 'location' not in tag.select_one('a').get('class', [])]
         
         return {
-            "csn": csn,
-            "company_name": company_name,
+            "rec_idx": rec_idx,
+            "job_url": f"https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx={rec_idx}",
             "position": position,
             "is_active": bool(is_active),
+            "deadline": deadline,
+            "csn": company_info.get("csn") if has_company_info else None,
+            "company_info": company_info if has_company_info else None,
             "employment_type": employment_type,
             "career": career,
             "education": education,
-            "deadline": deadline,
-            "corperation_info": corperation_info if has_corperation_info else None,
             "benefits": benefits if has_benefits else None,
-            "address": address if has_address else None,
-            "related_tags": related_tags if has_related_tags else None
+            "related_tags": related_tags if has_related_tags else None,
+            "address": address.split('\n')[0] if has_address else None,
         }
 
     def get_detailed_contents(self, html_content):
@@ -166,15 +187,15 @@ class SaraminCrawler(BaseCrawler):
         has_keyword = any(keyword in clean_text for keyword in self.keyword)
         has_emoji = len(emoji.emoji_list(clean_text)) > 0
 
-        content_type = "TEXT"
+        content_type = "text"
 
         if text_length < 200:
-            content_type = "IMAGE" if has_image else "TEXT"
+            content_type = "image" if has_image else "text"
         
         if not has_keyword and has_image:
             if has_emoji:
-                content_type = "TEXT"
-            print(f" {self.platform} | ⚠️ 텍스트는 길지만 핵심 키워드가 없어 IMAGE 공고로 판단합니다.")
+                content_type = "text"
+            self.logger.info(f"⚠️  텍스트는 길지만 핵심 키워드가 없어 IMAGE 공고로 판단합니다.")
             content_type = "IMAGE"
 
         h = html2text.HTML2Text()
@@ -185,72 +206,86 @@ class SaraminCrawler(BaseCrawler):
 
         return {
             "content_type": content_type,
-            "detail_contents": {
-                "image": images,
-                "text": markdown_text
-            }
+            "full_text": markdown_text,
+            "images": images
         }
 
+    async def fetch_company_info(self, company_url):
+        response = await self.request('GET', company_url)
+        if response is None:
+            return None
+        html_content = response.text
+        soup = BeautifulSoup(html_content, 'html.parser')
+
+        if has_company_logo := soup.select_one('div.common_company_info > div.company_logo > img'):
+            company_logo_url = has_company_logo.get('src')
+        if has_company_name := soup.select_one('div.common_company_info > .company_name'):
+            company_name = has_company_name.text.strip()
+        if has_industry := soup.select_one('div.common_company_info > .industry'):
+            industry = has_industry.text.strip()
+
+        company_info = dict()
+        for item in soup.select('div.tab_company_summary > ul > li'):
+            key = item.select_one('div.summary_label').text.strip()
+            value = item.select_one('div.summary_value')
+            if key == '기업형태':
+                company_info.update({'classification': value.select_one('.box_align').contents[0].strip()})
+            if key == '사원수':
+                company_info.update({'employees': value.select_one('.box_align').contents[0].replace("명","").strip()})
+            if key == '설립일':
+                company_info.update({'foundation_date': value.select_one('.txt_desc').text.replace("설립","").strip()})
+            if key == '주소':
+                company_info.update({'address': value.select_one('.addr').text.strip()})
+
+        if has_intro := soup.select_one('div.introduce_txt_box'):
+            introduction = has_intro.text.strip()
+        
+        return {
+            "company_url": company_url,
+            "company_logo_url": company_logo_url if has_company_logo else None,
+            "company_name": company_name,
+            "industry": industry if has_industry else None,
+            "introduction": introduction if has_intro else None,
+            **company_info
+        }
+
+
+
     async def run(self):
-        print("=== Saramin 크롤러 시작 ===")
+        self.logger.info("=== Saramin 크롤러 시작 ===")
         recruit_indices = await self.fetch_job_list()
         
         if not recruit_indices:
-            print("수집된 공고 ID가 없습니다.")
+            self.logger.info("수집된 공고 ID가 없습니다.")
             return []
         
-        print(f"총 {len(recruit_indices)}개의 공고를 수집합니다.")
+        self.logger.info(f"총 {len(recruit_indices)}개의 공고를 수집합니다.")
 
         tasks = [self.fetch_job_detail(rec_idx) for rec_idx in recruit_indices]
         results = await asyncio.gather(*tasks)
 
         results = [job for job in results if job is not None]
         
-        print(f"=== Saramin 크롤러 종료 (성공: {len(results)}건) ===")
+        self.logger.info(f"=== Saramin 크롤러 종료 (성공: {len(results)}건) ===")
         return results
 
 async def main():
-    print("🚀 [테스트] 사람인 크롤러 실행 중...")
-    async with SaraminCrawler() as crawler:
-        start = time.time()
-        results = await crawler.run()
-        end = time.time()
-        
-        if results:
-            print(f"\n✅ 총 {len(results)}개의 공고 수집 완료!")
-            print("--- [첫 번째 공고 샘플 데이터] ---")
-            pprint.pprint(results[0])
-            print([res['csn'] for res in results])
-        else:
-            print("\n❌ 수집된 데이터가 없습니다.")
-        print("소요시간:", end - start)
-        # await crawler.fetch_job_list()
-
-    # count = 0
-    # async with SaraminCrawler() as crawler:
-    #     start = time.time()
-    #     # 2. async 함수 앞에는 반드시 'await'를 붙여야 실행됩니다.
-    #     while count <= 10:
-    #         data = await crawler.fetch_job_list()
-    #         start = time.time()
-    #         for job_id in data:
-    #             print('######', job_id)
-    #             await crawler.fetch_job_detail(job_id)
-        # await crawler.fetch_job_detail(52324588) # 2.47
-        # await crawler.fetch_job_detail(52240035)
-        # await crawler.fetch_job_detail(50948511)
-        # await crawler.fetch_job_detail(52350937)
-        # await crawler.fetch_job_detail(52395348)
-        # await crawler.fetch_job_detail(52251857)
-        # await crawler.fetch_job_detail(52437935)
-        
-        # print(await crawler.fetch_job_summary(52437935))
-            # print(await crawler.fetch_job_summary(job_id)) # 8.6 52228457 52323189 52350728 51953338 52200480 52054054
-            # crawler.payload['page'] += 1
-            # count += 1
-        # print(data)
-        # print("소요시간:", time.time() - start)
-        # input()
+    logger = setup_logger("Crawler")
+    logger.info("🚀 [테스트] 사람인 크롤러 실행 중...")
+    async with SaraminCrawler(logger=logger) as crawler:
+        while crawler.payload['page'] < 2:
+            start = time.time()
+            results = await crawler.run()
+            end = time.time()
+            
+            if results:
+                logger.info(f"\n✅ 총 {len(results)}개의 공고 수집 완료!")
+                logger.info("--- [첫 번째 공고 샘플 데이터] ---")
+                pprint.pprint(results)
+            else:
+                logger.info("\n❌ 수집된 데이터가 없습니다.")
+            logger.info(f"Page: {crawler.payload['page']}, 소요시간: {end - start}")
+            crawler.payload['page'] += 1
 
 if __name__ == "__main__":
     asyncio.run(main())

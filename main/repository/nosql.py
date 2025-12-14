@@ -12,13 +12,12 @@ from borneo.iam import SignatureProvider
 from config.setting import Setting
 import traceback
 
-logger = logging.getLogger("IntegratedCrawler")
-
 class NoSQLRepository:
-    def __init__(self):
+    def __init__(self, logger):
         self.compartment_id = Setting.COMPARTMENT_OCID
         self.region = Regions.AP_CHUNCHEON_1
         self.table_name = Setting.NOSQL_TABLE_NAME
+        self.logger = logger.getChild("NoSQL")
 
         self.handle = self.create_handle()
         self.check_stmt = None
@@ -31,10 +30,10 @@ class NoSQLRepository:
             config = NoSQLHandleConfig(self.region, provider).set_default_compartment(self.compartment_id)
             
             handle = NoSQLHandle(config)
-            logger.info("✅ [NoSQLRepository] 핸들 생성 성공")
+            self.logger.debug("✅  핸들 생성 성공")
             return handle
         except Exception as e:
-            logger.error(f"❌ [NoSQLRepository] 핸들 생성 실패: {e}")
+            self.logger.error(f"❌  핸들 생성 실패: {e}")
             traceback.print_exc()
             return None
 
@@ -46,10 +45,10 @@ class NoSQLRepository:
             prep_res = self.handle.prepare(prep_req)
             
             self.check_stmt = prep_res.get_prepared_statement()
-            logger.info("⚡ [NoSQLRepository] 중복 확인 쿼리 Prepare 완료")
+            self.logger.debug("⚡  중복 확인 쿼리 Prepare 완료")
             
         except Exception as e:
-            logger.error(f"⚠️ [NoSQLRepository] 쿼리 Prepare 실패 (일반 쿼리로 대체됨): {e}")
+            self.logger.warning(f"⚠️  쿼리 Prepare 실패 (일반 쿼리로 대체됨): {e}")
             self.check_stmt = None
 
     def exists_by_url(self, url):
@@ -73,23 +72,23 @@ class NoSQLRepository:
             return len(results) > 0
 
         except Exception as e:
-            logger.error(f"⚠️ [NoSQLRepository] 중복 조회 오류: {e}")
+            self.logger.error(f"⚠️  중복 조회 오류: {e}")
             return False
 
     def save_raw_job(self, platform, job_data):
         if not self.handle:
-            logger.warning("⚠️ NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.")
+            self.logger.warning("⚠️  NoSQL 핸들이 초기화되지 않아 저장을 건너뜁니다.")
             return False
 
         try:
             unique_url = job_data.get('job_url')
 
             if not unique_url:
-                logger.warning(f"⚠️ [{platform}] URL이 없어 저장을 건너뜁니다.)")
+                self.logger.warning(f"[{platform}] ⚠️  URL이 없어 저장을 건너뜁니다.")
                 return False
 
             if self.exists_by_url(unique_url):
-                logger.info(f"⏭️ [NoSQLRepository] 이미 존재하는 공고 (Skip): {unique_url}")
+                self.logger.debug(f"⏭️ 이미 존재하는 공고 (Skip): {unique_url}")
                 return False
             
             row_to_put = {
@@ -100,17 +99,18 @@ class NoSQLRepository:
 
             req = PutRequest().set_table_name(self.table_name).set_value(row_to_put)
             self.handle.put(req)
+            self.logger.debug(f"💾 저장 성공: {unique_url}")
             return True
 
         except Exception as e:
-            logger.error(f"❌ [NoSQLRepository] 저장 실패 (ID: {job_data.get('id')}): {e}")
+            self.logger.error(f"❌ 저장 실패 (ID: {job_data.get('id')}): {e}", exc_info=True)
             traceback.print_exc()
             return False
 
     def close(self):
         if self.handle:
             self.handle.close()
-            logger.info("🔒 [NoSQLRepository] 핸들 종료")
+            self.logger.info("🔒  핸들 종료")
 
     def __enter__(self):
         return self

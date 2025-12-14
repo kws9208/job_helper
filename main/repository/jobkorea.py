@@ -5,53 +5,29 @@ from database.models.jobkorea import (
 )
 
 class JobkoreaRepository(BaseRepository):
-    def __init__(self, session):
-        super().__init__(session, RawJobkoreaJob, RawJobkoreaJob.gno)
+    def __init__(self, session, logger):
+        super().__init__(session, RawJobkoreaJob, RawJobkoreaJob.gno, logger)
 
     def save_job(self, data):
-        company = RawJobkoreaCompany(
-            company_id=data["company_id"],
-            company_name=data["company_name"]
-        )
-        self.session.merge(company)
+        if company_data := data["company"]:
+            company = RawJobkoreaCompany(**company_data)
+            self.session.merge(company)
 
-        gno = data["gno"]
-        existing_job = self.get_by_id(gno)
+        job_data = data["job"]
+        images = job_data.pop("images", []) or []
+        tags = job_data.pop("related_tags", []) or []
+        benefits = job_data.pop("benefits", []) or []
 
-        if existing_job:
-            job = existing_job
-            job.position = data.get("position")
-            job.is_active = data.get("is_active")
-            job.job_url = data.get("job_url")
-            job.full_text = data.get("detail_contents", {}).get("text")
-            
-            job.images.clear()
-            job.tags.clear()
-            job.benefits.clear()
-        else:
-            job = RawJobkoreaJob(
-                gno=gno,
-                company_id=data["company_id"],
-                position=data.get("position"),
-                is_active=True,
-                job_url=data.get("job_url"),
-                content_type=data.get("content_type"),
-                full_text=data.get("detail_contents", {}).get("text"),
-                employment_type=data.get("employment_type"),
-                deadline=data.get("deadline"),
-                address=data.get("address"),
-                career=data.get("career"),
-                education=data.get("education")
-            )
-            self.session.add(job)
+        job = RawJobkoreaJob(**job_data)
+        self.session.merge(job)
 
-        for img in data.get("detail_contents", {}).get("image") or []:
-            job.images.append(RawJobkoreaJobImage(image_url=img))
+        for img_url in images:
+            job.images.append(RawJobkoreaJobImage(image_url=img_url))
 
-        for tag in data.get("related_tags") or []:
+        for tag in tags:
             job.tags.append(RawJobkoreaJobTag(tag_name=tag))
 
-        for benefit in data.get("benefits") or []:
+        for benefit in benefits:
             job.benefits.append(RawJobkoreaJobBenefit(benefit_text=benefit))
 
         self.session.flush()

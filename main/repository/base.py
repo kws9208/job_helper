@@ -1,10 +1,11 @@
 from sqlalchemy import select
 
 class BaseRepository:
-    def __init__(self, session, model_cls, pk_column):
+    def __init__(self, session, model_cls, pk_column, logger):
         self.session = session
         self.model = model_cls
         self.pk_column = pk_column
+        self.logger = logger
 
     def get_by_id(self, id_value):
         stmt = select(self.model).where(self.pk_column == id_value)
