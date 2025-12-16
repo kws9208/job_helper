@@ -8,6 +8,12 @@ class WantedRepository(BaseRepository):
     def __init__(self, session, logger):
         super().__init__(session, RawWantedJob, RawWantedJob.job_id, logger)
 
+    def need_job_crawling(self, id_value, expire_days=7):
+        return self.need_crawling(id_value, expire_days, RawWantedJob, RawWantedJob.job_id)
+
+    def need_company_crawling(self, id_value, expire_days=30):
+        return self.need_crawling(id_value, expire_days, RawWantedCompany, RawWantedCompany.company_id)
+
     def save_job(self, data):
         if company_data := data["company"]:
             company = RawWantedCompany(**company_data)

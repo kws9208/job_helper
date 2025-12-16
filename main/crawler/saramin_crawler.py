@@ -39,35 +39,58 @@ class SaraminCrawler(BaseCrawler):
 
         return rec_indices
 
-    async def fetch_details_by_ids(self, job_ids):
-        tasks = [self.fetch_job_detail(job_id) for job_id in job_ids]
-        results = await asyncio.gather(*tasks)
-        return [job for job in results if job is not None]
-
     async def fetch_job_detail(self, rec_idx):
         response = await self.request("POST", self.job_detail_url, headers=self.header, data={"rec_idx": rec_idx})
         if response is None:
             return None
         html_content = response.text
+        soup = BeautifulSoup(html_content, 'html.parser')
 
-        job_summaray = await self.fetch_job_summary(rec_idx)
+        for element in soup(["script", "style", "noscript"]):
+            element.extract()
+
+        images = [f'https:{img.get("src")}' if img.get("src").startswith("//") else img.get("src") for img in soup.find_all('img')]
+        has_image = len(images) > 0
+
+        for tag in soup.find_all('p', attrs={'hidden': True}):
+            tag.decompose()
+    
+        hidden_style_pattern = re.compile(r'(font-size:\s*0|height:\s*0|width:\s*0|display:\s*none|visibility:\s*hidden)', re.IGNORECASE)
+        hidden_tags = soup.find_all(attrs={"style": hidden_style_pattern})
+        for tag in hidden_tags:
+            tag.decompose()
+
+        blind_tags = soup.find_all(class_=re.compile(r'(blind|hidden|sr-only)'))
+        for tag in blind_tags:
+            tag.decompose()
+
+        clean_text = soup.get_text(separator=' ', strip=True)
+        text_length = len(clean_text)
+
+        has_keyword = any(keyword in clean_text for keyword in self.keyword)
+        has_emoji = len(emoji.emoji_list(clean_text)) > 0
+
+        content_type = "text"
+
+        if text_length < 200:
+            content_type = "image" if has_image else "text"
         
-        detail_contents = self.get_detailed_contents(html_content)
+        if not has_keyword and has_image:
+            if has_emoji:
+                content_type = "text"
+            self.logger.info(f"⚠️  텍스트는 길지만 핵심 키워드가 없어 IMAGE 공고로 판단합니다.")
+            content_type = "IMAGE"
 
-        company_info = dict()
-        if job_summaray["company_info"]:
-            if company_url := job_summaray["company_info"]["company_url"]:
-                company_info = await self.fetch_company_info(company_url)
-            company_info = company_info | job_summaray.pop("company_info")
-        else:
-            del job_summaray["company_info"]
+        h = html2text.HTML2Text()
+        h.ignore_links = False
+        h.ignore_images = True
+        h.body_width = 0
+        markdown_text = h.handle(str(soup))
 
         return {
-            "company": company_info,
-            "job": {
-                **job_summaray, 
-                **detail_contents
-            }
+            "content_type": content_type,
+            "full_text": markdown_text,
+            "images": images
         }
     
     async def fetch_job_summary(self, rec_idx):
@@ -160,56 +183,6 @@ class SaraminCrawler(BaseCrawler):
             "address": address.split('\n')[0] if has_address else None,
         }
 
-    def get_detailed_contents(self, html_content):
-        soup = BeautifulSoup(html_content, 'html.parser')
-
-        for element in soup(["script", "style", "noscript"]):
-            element.extract()
-
-        images = [f'https:{img.get("src")}' if img.get("src").startswith("//") else img.get("src") for img in soup.find_all('img')]
-        has_image = len(images) > 0
-
-        for tag in soup.find_all('p', attrs={'hidden': True}):
-            tag.decompose()
-    
-        hidden_style_pattern = re.compile(r'(font-size:\s*0|height:\s*0|width:\s*0|display:\s*none|visibility:\s*hidden)', re.IGNORECASE)
-        hidden_tags = soup.find_all(attrs={"style": hidden_style_pattern})
-        for tag in hidden_tags:
-            tag.decompose()
-
-        blind_tags = soup.find_all(class_=re.compile(r'(blind|hidden|sr-only)'))
-        for tag in blind_tags:
-            tag.decompose()
-
-        clean_text = soup.get_text(separator=' ', strip=True)
-        text_length = len(clean_text)
-
-        has_keyword = any(keyword in clean_text for keyword in self.keyword)
-        has_emoji = len(emoji.emoji_list(clean_text)) > 0
-
-        content_type = "text"
-
-        if text_length < 200:
-            content_type = "image" if has_image else "text"
-        
-        if not has_keyword and has_image:
-            if has_emoji:
-                content_type = "text"
-            self.logger.info(f"⚠️  텍스트는 길지만 핵심 키워드가 없어 IMAGE 공고로 판단합니다.")
-            content_type = "IMAGE"
-
-        h = html2text.HTML2Text()
-        h.ignore_links = False
-        h.ignore_images = True
-        h.body_width = 0
-        markdown_text = h.handle(str(soup))
-
-        return {
-            "content_type": content_type,
-            "full_text": markdown_text,
-            "images": images
-        }
-
     async def fetch_company_info(self, company_url):
         response = await self.request('GET', company_url)
         if response is None:
@@ -249,7 +222,25 @@ class SaraminCrawler(BaseCrawler):
             **company_info
         }
 
+    async def fetch_job(self, gno):
+        job_summaray = await self.fetch_job_summary(gno)
+        detail_contents = await self.fetch_job_detail(gno)
 
+        company_info = dict()
+        if job_summaray["company_info"]:
+            if company_url := job_summaray["company_info"]["company_url"]:
+                company_info = await self.fetch_company_info(company_url)
+            company_info = company_info | job_summaray.pop("company_info")
+        else:
+            del job_summaray["company_info"]
+
+        return {
+            "company": company_info,
+            "job": {
+                **job_summaray, 
+                **detail_contents
+            }
+        }
 
     async def run(self):
         self.logger.info("=== Saramin 크롤러 시작 ===")
@@ -261,7 +252,7 @@ class SaraminCrawler(BaseCrawler):
         
         self.logger.info(f"총 {len(recruit_indices)}개의 공고를 수집합니다.")
 
-        tasks = [self.fetch_job_detail(rec_idx) for rec_idx in recruit_indices]
+        tasks = [self.fetch_job(rec_idx) for rec_idx in recruit_indices]
         results = await asyncio.gather(*tasks)
 
         results = [job for job in results if job is not None]

@@ -26,26 +26,12 @@ class WantedCrawler(BaseCrawler):
         job_list_response = await self.request('GET', self.job_list_url, headers=self.header, params=self.payload)
         job_ids = [job['id'] for job in job_list_response.json()["data"]]
         return job_ids
-
-    async def fetch_details_by_ids(self, job_ids):
-        self.logger.info(f"🔍 {len(job_ids)}개의 상세 페이지 수집 시작...")
-        tasks = [self.fetch_job_detail(job_id) for job_id in job_ids]
-        results = await asyncio.gather(*tasks)
-        return [job for job in results if job is not None]
     
     async def fetch_job_detail(self, job_id):
         job_url = f"{self.job_detail_url}/{job_id}/details"
-        try:
-            job_detail_response = await self.request('GET', job_url)
-            job_detail_data = self.parse_job_data(job_detail_response.json(), job_url)
-            if company_id := job_detail_data.get('company_id'):
-                company_info_data = await self.fetch_company_info(company_id)
-        except Exception:
-            return None
-        return {
-            "company": company_info_data if company_id else None,
-            "job": job_detail_data,
-        }
+        job_detail_response = await self.request('GET', job_url)
+        job_detail_data = self.parse_job_data(job_detail_response.json(), job_url)
+        return job_detail_data
 
     def parse_job_data(self, details_json, url):
         try:
@@ -83,11 +69,9 @@ class WantedCrawler(BaseCrawler):
             company_url = f"{self.company_url}/company/{company_id}/info-for-wanted"
             company_info_response = await self.request('GET', company_url)
             company_info_data = self.parse_company_data(company_info_response.json(), company_url)
-            pprint.pprint(company_info_data)
             if company_info_data.get('reg_no_hash'):
                 employee_info_response = await self.request('GET', f"{self.company_url}/wanted/{company_info_data.get('reg_no_hash')}/employees")
                 employees_info_data = employee_info_response.json()
-                pprint.pprint(employees_info_data)
                 if employee_info := employees_info_data.get('employees'):
                     employees = employee_info.get(employees_info_data.get('defaultSource')).get('employee')
                     company_info_data['employees'] = employees
@@ -117,6 +101,16 @@ class WantedCrawler(BaseCrawler):
             self.logger.warning(f"[파싱 에러] id: {data_json.get('wantedCompanyId')} / {e}",  exc_info=True)
             return None
 
+    async def fetch_job(self, job_id):
+        job_detail_data = await self.fetch_job_detail(job_id)
+        if company_id := job_detail_data.get('company_id'):
+            company_info_data = await self.fetch_company_info(company_id)
+
+        return {
+            "company": company_info_data if company_id else None,
+            "job": job_detail_data,
+        }
+
     async def run(self):
         self.logger.info("=== Wanted 크롤러 시작 ===")
         job_ids = await self.fetch_job_list()
@@ -127,7 +121,7 @@ class WantedCrawler(BaseCrawler):
         
         self.logger.info(f"총 {len(job_ids)}개의 공고를 수집합니다.")
 
-        tasks = [self.fetch_job_detail(job_id) for job_id in job_ids]
+        tasks = [self.fetch_job(job_id) for job_id in job_ids]
         
         results = await asyncio.gather(*tasks)
 

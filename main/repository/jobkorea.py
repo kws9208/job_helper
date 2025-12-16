@@ -8,6 +8,12 @@ class JobkoreaRepository(BaseRepository):
     def __init__(self, session, logger):
         super().__init__(session, RawJobkoreaJob, RawJobkoreaJob.gno, logger)
 
+    def need_job_crawling(self, id_value, expire_days=7):
+        return self.need_crawling(id_value, expire_days, RawJobkoreaJob, RawJobkoreaJob.gno)
+
+    def need_company_crawling(self, id_value, expire_days=30):
+        return self.need_crawling(id_value, expire_days, RawJobkoreaCompany, RawJobkoreaCompany.company_id)
+
     def save_job(self, data):
         if company_data := data["company"]:
             company = RawJobkoreaCompany(**company_data)

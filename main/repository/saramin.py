@@ -8,6 +8,12 @@ class SaraminRepository(BaseRepository):
     def __init__(self, session, logger):
         super().__init__(session, RawSaraminJob, RawSaraminJob.rec_idx, logger)
 
+    def need_job_crawling(self, id_value, expire_days=7):
+        return self.need_crawling(id_value, expire_days, RawSaraminJob, RawSaraminJob.rec_idx)
+
+    def need_company_crawling(self, id_value, expire_days=30):
+        return self.need_crawling(id_value, expire_days, RawSaraminCompany, RawSaraminCompany.csn)
+
     def save_job(self, data):
         if company_data := data["company"]:
             company = RawSaraminCompany(**company_data)
