@@ -25,9 +25,9 @@ class BaseCrawler(ABC):
                 try:
                     response = await self.client.request(method, url, **kwargs)
                     if response.status_code in [302, 404, 503]:
-                        self.logger.warning(f"🚫 [Pass] 공고가 삭제되거나 검수 중입니다."
-                                            f"(Request URL: {url})"
-                                            f"(Status Code: {response.status_code})"
+                        self.logger.warning(f"🚫 [Pass] 공고가 삭제되거나 검수 중입니다.\n"
+                                            f"(Request URL: {url})\n"
+                                            f"(Status Code: {response.status_code})\n"
                                             f"(Location: {response.headers.get('Location')})")
                         return None
                         
@@ -35,8 +35,8 @@ class BaseCrawler(ABC):
                     return response
                 except (httpx.ConnectTimeout, httpx.ReadTimeout, httpx.RemoteProtocolError, httpx.ConnectError, httpx.ReadError) as e:
                     if attempt == retries:
-                        self.logger.error(f"🔥 [최종 실패] {self.platform} | URL: {url}"
-                                          f"   ㄴ 에러: {e}"
+                        self.logger.error(f"🔥 [최종 실패] {self.platform} | URL: {url}\n"
+                                          f"   ㄴ 에러: {e}\n"
                                           f"   ㄴ 요청 데이터(Payload): {kwargs}")
                         raise
                     wait_time = 2 ** attempt # 2초, 4초...
@@ -51,7 +51,7 @@ class BaseCrawler(ABC):
                     raise
                 except httpx.HTTPStatusError as e:
                     self.logger.error(
-                        f"[상태 코드 에러] {e.response.status_code} - {e.request.url!r}"
+                        f"[상태 코드 에러] {e.response.status_code} - {e.request.url!r}\n"
                         f"   ㄴ 요청 데이터(Payload): {kwargs}"
                     )
                     raise
